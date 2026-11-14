@@ -1,0 +1,12 @@
+{
+  "name": "grade-average-calculator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CMPS 510 Project 8 - Grade Average Calculator",
+  "scripts": {
+    "test": "node test.js",
+    "build": "node scripts/build.js",
+    "ci": "npm test && npm run build"
+  },
+  "engines": { "node": ">=18" }
+}

@@ -1,0 +1,71 @@
+=== STEP 1: introduce a bug (boundary: >= 90 changed to > 90) ===
+$ npm test
+
+> grade-average-calculator@1.0.0 test
+> node test.js
+
+PASS Ex1 average -> 84.33
+PASS Ex1 letter -> B
+PASS Ex2 average -> 92.67
+PASS Ex2 letter -> A
+PASS Weighted average -> 83.33
+PASS Empty list -> null
+node:assert:150
+  throw new AssertionError(obj);
+  ^
+
+AssertionError [ERR_ASSERTION]: Boundary 90: got B, want A
+
+'B' !== 'A'
+
+    at check (/home/claude/grade-average-calculator/test.js:6:10)
+    at Object.<anonymous> (/home/claude/grade-average-calculator/test.js:27:1)
+    at Module._compile (node:internal/modules/cjs/loader:1781:14)
+    at Object..js (node:internal/modules/cjs/loader:1913:10)
+    at Module.load (node:internal/modules/cjs/loader:1505:32)
+    at Function._load (node:internal/modules/cjs/loader:1309:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:254:19)
+    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:171:5)
+    at node:internal/main/run_main_module:36:49 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'B',
+  expected: 'A',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v22.23.4
+exit code: 1
+
+=> pipeline would be RED (build/deploy jobs skipped)
+
+=== STEP 2: fix the bug (restore >= 90) and re-run ===
+$ npm run ci
+
+> grade-average-calculator@1.0.0 ci
+> npm test && npm run build
+
+
+> grade-average-calculator@1.0.0 test
+> node test.js
+
+PASS Ex1 average -> 84.33
+PASS Ex1 letter -> B
+PASS Ex2 average -> 92.67
+PASS Ex2 letter -> A
+PASS Weighted average -> 83.33
+PASS Empty list -> null
+PASS Boundary 90 -> A
+PASS Boundary 89.99 -> B
+PASS Boundary 59.9 -> F
+
+All tests passed.
+
+> grade-average-calculator@1.0.0 build
+> node scripts/build.js
+
+Build OK: 4 files written to dist/
+exit code: 0
+
+=> pipeline GREEN
