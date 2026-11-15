@@ -5,7 +5,7 @@ const { execFileSync } = require("child_process");
 
 const root = path.join(__dirname, "..");
 const dist = path.join(root, "dist");
-const files = ["index.html", "style.css", "grades.js", "app.js"];
+const files = ["index.html", "tests.html", "style.css", "grades.js", "app.js"];
 
 // 1. Required files exist
 for (const f of files) {

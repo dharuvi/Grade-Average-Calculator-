@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Test cases – Grade Average Calculator</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: .9rem; }
+    th, td { text-align: left; padding: 8px; border-bottom: 1px solid #e5e7eb; }
+    .pass { color: #15803d; font-weight: 700; } .fail { color: #b91c1c; font-weight: 700; }
+    #summary { font-weight: 700; margin-top: 12px; }
+    a.back { display: inline-block; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <h1>Test cases</h1>
+    <p class="sub">These tests run live in your browser using the same calculation code as the app (<code>grades.js</code>).</p>
+    <p id="summary"></p>
+    <table>
+      <thead><tr><th>Test</th><th>Input</th><th>Expected</th><th>Got</th><th></th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <a class="back" href="index.html">← Back to the calculator</a>
+  </main>
+  <script src="grades.js"></script>
+  <script>
+    var c = function (g, cr) { return { grade: g, credits: cr || 1 }; };
+    var r2 = function (x) { return x === null ? null : Math.round(x * 100) / 100; };
+    var tests = [
+      ["Example 1 average", "85, 90, 78", "84.33", function () { return r2(Grades.calculateAverage([c(85), c(90), c(78)], false)); }, 84.33],
+      ["Example 1 letter", "84.33", "B", function () { return Grades.letterGrade(84.33); }, "B"],
+      ["Example 2 average", "95, 92, 91", "92.67", function () { return r2(Grades.calculateAverage([c(95), c(92), c(91)], false)); }, 92.67],
+      ["Example 2 letter", "92.67", "A", function () { return Grades.letterGrade(92.67); }, "A"],
+      ["Weighted average", "90 (4 cr), 70 (2 cr)", "83.33", function () { return r2(Grades.calculateAverage([c(90, 4), c(70, 2)], true)); }, 83.33],
+      ["Empty list", "(no courses)", "null", function () { return Grades.calculateAverage([], false); }, null],
+      ["Boundary 90", "90", "A", function () { return Grades.letterGrade(90); }, "A"],
+      ["Boundary 89.99", "89.99", "B", function () { return Grades.letterGrade(89.99); }, "B"],
+      ["Boundary 59.9", "59.9", "F", function () { return Grades.letterGrade(59.9); }, "F"]
+    ];
+    var passed = 0, rows = document.getElementById("rows");
+    tests.forEach(function (t) {
+      var got = t[3](), ok = got === t[4]; if (ok) passed++;
+      var tr = document.createElement("tr");
+      [t[0], t[1], t[2], String(got)].forEach(function (txt) {
+        var td = document.createElement("td"); td.textContent = txt; tr.appendChild(td);
+      });
+      var s = document.createElement("td"); s.className = ok ? "pass" : "fail"; s.textContent = ok ? "PASS" : "FAIL";
+      tr.appendChild(s); rows.appendChild(tr);
+    });
+    document.getElementById("summary").textContent = passed + " of " + tests.length + " tests passed";
+  </script>
+</body>
+</html>
